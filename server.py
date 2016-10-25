@@ -91,7 +91,14 @@ def update(entity):
 @app.route("/world", methods=['POST','GET'])
 def world():
     '''you should probably return the world here'''
-    return flask.jsonify(myWorld.world())
+    if request.method == 'GET':
+        return flask.jsonify(myWorld.world())
+    elif request.method == 'POST':
+        updates = flask_post_json()
+        if updates != None:
+            for key in updates:
+                myWorld.set(entity, key, updates[key])
+        return flask.jsonify(myWorld.world())
 
 @app.route("/entity/<entity>")    
 def get_entity(entity):
